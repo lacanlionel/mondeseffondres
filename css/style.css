@@ -42,73 +42,133 @@ html,body{margin:0;height:100%;background:var(--ink);font-family:'IBM Plex Mono'
 .marker:hover{ transform: scale(1.25); }
 .marker.active{ background-color: var(--verdigris); }
 
-.panel{
-  position:absolute; left:0; right:0; bottom:0; z-index:6;
-  background: var(--ink);
+/* ----- Encart position GPS ----- */
+.gps-box{
+  position:absolute; left:16px; bottom:16px; z-index:5;
+  background: rgba(23,22,15,0.72);
+  backdrop-filter: blur(2px);
+  border: 1px solid var(--line);
+  padding: 8px 12px;
+  font-size: 11px;
+  letter-spacing: 0.03em;
+  color: var(--paper-dim);
+  line-height: 1.5;
+  pointer-events:none;
+  min-width: 150px;
+}
+.gps-box .label{
+  display:block;
+  font-size:9px; letter-spacing:0.1em; text-transform:uppercase;
+  color: var(--ochre);
+  margin-bottom: 2px;
+}
+#gpsCoords{ color: var(--paper); font-variant-numeric: tabular-nums; }
+
+/* ----- Popup MapLibre (fenêtre bulle sobre) ----- */
+.maplibregl-popup-content{
+  background: var(--ink) !important;
+  color: var(--paper) !important;
+  border: 1px solid var(--line) !important;
+  border-radius: 2px !important;
+  padding: 0 !important;
+  box-shadow: 0 8px 28px rgba(0,0,0,0.45) !important;
+  overflow: hidden;
+}
+.maplibregl-popup-tip{
+  border-top-color: var(--ink) !important;
+  border-bottom-color: var(--ink) !important;
+}
+.maplibregl-popup-close-button{
+  color: var(--paper-dim) !important;
+  font-size: 16px !important;
+  padding: 4px 8px !important;
+  right: 2px !important; top: 2px !important;
+}
+.maplibregl-popup-close-button:hover{
+  background: rgba(94,122,110,0.25) !important;
+  color: var(--paper) !important;
+}
+
+.popup-card{ width: 220px; }
+.popup-photo-btn{
+  display:block; width:100%; height:150px;
+  border:0; padding:0; margin:0;
+  cursor: zoom-in;
+  background:#000;
+  overflow:hidden;
+}
+.popup-photo-btn img{
+  width:100%; height:100%;
+  object-fit: cover; display:block;
+  filter: sepia(0.12) contrast(1.05);
+}
+.popup-caption{ padding: 10px 12px 12px; }
+.popup-title{
+  font-family:'Fraunces', serif; font-weight:500; font-size:14px;
+  color: var(--paper); line-height:1.3; margin-bottom:6px;
+}
+.popup-note{
+  font-size:11px; line-height:1.55; color: var(--paper-dim);
+  margin-bottom:8px;
+}
+.popup-footer{
+  display:flex; justify-content:space-between; align-items:baseline;
+  font-size:10px; letter-spacing:0.04em;
+  color: var(--verdigris);
   border-top: 1px solid var(--line);
-  transform: translateY(100%);
-  transition: transform .35s cubic-bezier(.22,.68,0,1);
-  max-height: 62vh;
-  display:flex; flex-direction:column;
-}
-.panel.open{ transform: translateY(0); }
-
-.panel-handle{
-  display:flex; justify-content:center; padding:8px 0 2px;
-}
-.panel-handle span{
-  width:36px;height:3px;border-radius:2px;background:var(--line);
+  padding-top:6px;
 }
 
-.panel-body{
-  display:flex; gap:16px; padding: 8px 20px 22px;
-  overflow-y:auto;
+/* ----- Visionneuse plein écran ----- */
+.fullscreen-viewer{
+  position:fixed; inset:0; z-index:50;
+  background: rgba(10,9,6,0.96);
+  display:none;
+  align-items:center; justify-content:center;
+  touch-action:none;
 }
-.photo{
-  flex: 0 0 128px;
-  width:128px; height:160px;
+.fullscreen-viewer.open{ display:flex; }
+
+.fs-stage{
+  width:100%; height:100%;
+  overflow:hidden;
+  display:flex; align-items:center; justify-content:center;
   position:relative;
-  background: linear-gradient(160deg, #6b6249, #3a3527 55%, #23201a);
-  background-size: cover;
-  background-position: center;
-  border: 1px solid rgba(236,228,211,0.15);
-  filter: sepia(0.15) contrast(1.05);
 }
-.photo::after{
-  content:"";
-  position:absolute; inset:0;
-  background: radial-gradient(ellipse at 50% 40%, transparent 40%, rgba(0,0,0,0.45) 100%);
-}
-.photo .frame-no{
-  position:absolute; bottom:6px; left:8px;
-  font-size:10px; letter-spacing:0.05em; color: var(--paper-dim);
-  z-index:2;
+.fs-stage img{
+  max-width:90%; max-height:90%;
+  user-select:none; -webkit-user-drag:none;
+  transform-origin:center center;
+  will-change:transform;
 }
 
-.info{ flex:1; min-width:0; }
-.info .cat{
-  font-size:10px; letter-spacing:0.12em; text-transform:uppercase;
-  color: var(--ochre); margin-bottom:6px;
+.fs-close{
+  position:absolute; top:16px; right:20px; z-index:2;
+  background:none; border:none;
+  color: var(--paper-dim);
+  font-family:'IBM Plex Mono',monospace;
+  font-size:20px;
+  cursor:pointer;
+  padding:8px;
 }
-.info h2{
-  font-family:'Fraunces', serif; font-weight:500; font-size:19px;
-  margin: 0 0 8px; color: var(--paper); line-height:1.25;
+.fs-close:hover{ color: var(--paper); }
+
+.fs-controls{
+  position:absolute; bottom:20px; right:20px; z-index:2;
+  display:flex; flex-direction:column; gap:8px;
 }
-.info p{
-  font-size:12.5px; line-height:1.6; color: var(--paper-dim);
-  margin: 0 0 10px; max-width: 46ch;
+.fs-controls button{
+  width:38px; height:38px; border-radius:50%;
+  border:1px solid var(--line);
+  background: rgba(23,22,15,0.72);
+  color: var(--paper-dim);
+  font-size:18px; line-height:1;
+  cursor:pointer;
 }
-.coords{
-  font-size:11px; color: var(--verdigris); letter-spacing:0.03em;
+.fs-controls button:hover{
+  color: var(--paper);
+  background: rgba(94,122,110,0.3);
 }
-.close{
-  position:absolute; top:10px; right:16px;
-  background:none; border:none; color:var(--paper-dim);
-  font-family:'IBM Plex Mono',monospace; font-size:11px;
-  letter-spacing:0.08em; text-transform:uppercase;
-  cursor:pointer; padding:6px;
-}
-.close:hover{ color: var(--paper); }
 
 .attrib-fix .maplibregl-ctrl-attrib{
   background: rgba(23,22,15,0.55) !important;

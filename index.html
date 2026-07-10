@@ -19,10 +19,22 @@
   <div class="meta">Saint-Quentin-la-Poterie · Gard<br>archive photographique du paysage</div>
 </div>
 
-<div class="panel" id="panel">
-  <button class="close" id="closeBtn">Fermer ✕</button>
-  <div class="panel-handle"><span></span></div>
-  <div class="panel-body" id="panelBody"></div>
+<!-- Encart position GPS de l'utilisateur -->
+<div class="gps-box" id="gpsBox">
+  <span class="label">Ma position</span>
+  <span id="gpsCoords">recherche du signal…</span>
+</div>
+
+<!-- Visionneuse plein écran -->
+<div class="fullscreen-viewer" id="fsViewer">
+  <button class="fs-close" id="fsClose" aria-label="Fermer">✕</button>
+  <div class="fs-controls">
+    <button id="zoomIn" aria-label="Zoomer">＋</button>
+    <button id="zoomOut" aria-label="Dézoomer">－</button>
+  </div>
+  <div class="fs-stage" id="fsStage">
+    <img id="fsImage" src="" alt="">
+  </div>
 </div>
 
 <script src="js/app.js"></script>
