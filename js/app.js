@@ -1,30 +1,20 @@
 // ---------------------------------------------------------------
-// Carte
+// Carte — même esthétique que le prototype : tuiles vectorielles
+// OpenFreeMap repeintes dans la palette du site (papier / encre /
+// verdigris / ochre), sans dépendance à une clé API.
 // ---------------------------------------------------------------
 const CENTER = [4.439712, 44.045885]; // [lng, lat]
 
-const osmStyle = {
-  version: 8,
-  sources: {
-    osm: {
-      type: 'raster',
-      tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],
-      tileSize: 256,
-      attribution: '© OpenStreetMap contributors'
-    }
-  },
-  layers: [{ id: 'osm', type: 'raster', source: 'osm' }]
-};
-
 const map = new maplibregl.Map({
   container: 'map',
-  style: osmStyle,
+  style: 'https://tiles.openfreemap.org/styles/positron',
   center: CENTER,
   zoom: 17,
   pitch: 0
 });
 
-map.addControl(new maplibregl.NavigationControl({ showCompass: true }), 'top-right');
+// Outils de navigation groupés en bas à droite (zoom + boussole + géolocalisation)
+map.addControl(new maplibregl.NavigationControl({ showCompass: true }), 'bottom-right');
 
 const geolocate = new maplibregl.GeolocateControl({
   positionOptions: { enableHighAccuracy: true },
@@ -32,7 +22,40 @@ const geolocate = new maplibregl.GeolocateControl({
   showAccuracyCircle: true,
   showUserHeading: true
 });
-map.addControl(geolocate, 'top-right');
+map.addControl(geolocate, 'bottom-right');
+
+function repaintStyle() {
+  const layers = map.getStyle().layers;
+  layers.forEach(layer => {
+    const id = layer.id;
+    try {
+      if (layer.type === 'background') {
+        map.setPaintProperty(id, 'background-color', '#ECE4D3');
+      } else if (layer.type === 'fill') {
+        if (/water/i.test(id)) {
+          map.setPaintProperty(id, 'fill-color', '#B9C7C0');
+        } else if (/park|wood|forest|landuse|land|vegetation|grass/i.test(id)) {
+          map.setPaintProperty(id, 'fill-color', '#D9D2BB');
+        } else if (/building/i.test(id)) {
+          map.setPaintProperty(id, 'fill-color', '#D8CDB4');
+        }
+      } else if (layer.type === 'line') {
+        if (/water|river|stream/i.test(id)) {
+          map.setPaintProperty(id, 'line-color', '#8FA79D');
+        } else if (/road|street|highway|path|track/i.test(id)) {
+          map.setPaintProperty(id, 'line-color', '#B7A98A');
+        } else if (/building/i.test(id)) {
+          map.setPaintProperty(id, 'line-color', '#C4B896');
+        }
+      } else if (layer.type === 'symbol') {
+        if (/poi|place|label/i.test(id)) {
+          map.setPaintProperty(id, 'text-color', '#8A7E60');
+          map.setPaintProperty(id, 'text-halo-color', '#ECE4D3');
+        }
+      }
+    } catch (e) { /* propriété absente pour ce type de calque : on ignore */ }
+  });
+}
 
 // ---------------------------------------------------------------
 // Encart GPS utilisateur (bas gauche)
@@ -53,9 +76,11 @@ geolocate.on('error', () => {
 });
 
 map.on('load', () => {
-  // déclenche la géolocalisation automatiquement au chargement
-  geolocate.trigger();
+  repaintStyle();
+  // les repères photo sont ajoutés au DOM avant le déclenchement du
+  // suivi GPS, pour qu'ils restent au-dessus du point utilisateur
   loadPhotos();
+  geolocate.trigger();
 });
 
 // ---------------------------------------------------------------

@@ -194,6 +194,7 @@ html,body{margin:0;height:100%;background:var(--ink);font-family:'IBM Plex Mono'
 /* Point "vous êtes ici" + cercle de précision */
 .maplibregl-user-location-dot{
   background-color: var(--verdigris) !important;
+  z-index: 2;
 }
 .maplibregl-user-location-dot::before{
   background-color: var(--verdigris) !important;
@@ -203,7 +204,18 @@ html,body{margin:0;height:100%;background:var(--ink);font-family:'IBM Plex Mono'
 }
 .maplibregl-user-location-accuracy-circle{
   background-color: rgba(94,122,110,0.15) !important;
+  /* le cercle de précision ne doit jamais intercepter les clics :
+     sinon un repère photo situé dessous devient injoignable */
+  pointer-events: none !important;
+  z-index: 1;
 }
 .maplibregl-user-location-heading{
   filter: hue-rotate(80deg) saturate(1.4);
+}
+
+/* Les repères photo restent toujours au-dessus du point utilisateur
+   et de son cercle de précision, même en cas de superposition exacte */
+.marker{
+  z-index: 3;
+  position: relative;
 }
