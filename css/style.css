@@ -38,9 +38,25 @@ html,body{margin:0;height:100%;background:var(--ink);font-family:'IBM Plex Mono'
   transition: transform .15s ease;
   background-size: cover;
   background-position: center;
+  /* la zone visuelle reste petite, mais la zone cliquable est agrandie
+     ci-dessous (::before) pour rester utilisable au doigt */
+  position: relative;
 }
 .marker:hover{ transform: scale(1.25); }
 .marker.active{ background-color: var(--verdigris); }
+
+/* Zone tactile invisible et élargie (~44px, recommandation mobile),
+   centrée sur le repère : évite les clics ratés sur petit écran */
+.marker::before{
+  content:"";
+  position:absolute;
+  top:50%; left:50%;
+  width:44px; height:44px;
+  transform: translate(-50%, -50%);
+  border-radius:50%;
+  background: transparent;
+  pointer-events:auto;
+}
 
 /* ----- Encart position GPS ----- */
 .gps-box{
@@ -195,27 +211,33 @@ html,body{margin:0;height:100%;background:var(--ink);font-family:'IBM Plex Mono'
 .maplibregl-user-location-dot{
   background-color: var(--verdigris) !important;
   z-index: 2;
+  /* le point GPS lui-même ne doit jamais intercepter les clics :
+     seul son affichage nous intéresse, pas son interaction */
+  pointer-events: none !important;
 }
 .maplibregl-user-location-dot::before{
   background-color: var(--verdigris) !important;
+  pointer-events: none !important;
 }
 .maplibregl-user-location-dot::after{
   border-color: var(--verdigris) !important;
+  pointer-events: none !important;
 }
 .maplibregl-user-location-accuracy-circle{
   background-color: rgba(94,122,110,0.15) !important;
   /* le cercle de précision ne doit jamais intercepter les clics :
      sinon un repère photo situé dessous devient injoignable */
   pointer-events: none !important;
-  z-index: 1;
+  z-index: 1 !important;
 }
 .maplibregl-user-location-heading{
   filter: hue-rotate(80deg) saturate(1.4);
 }
 
 /* Les repères photo restent toujours au-dessus du point utilisateur
-   et de son cercle de précision, même en cas de superposition exacte */
+   et de son cercle de précision, même en cas de superposition exacte.
+   z-index fort + !important pour ne jamais être repassé dessous. */
 .marker{
-  z-index: 3;
+  z-index: 50 !important;
   position: relative;
 }

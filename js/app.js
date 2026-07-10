@@ -104,8 +104,15 @@ function popupHTML(props, lng, lat) {
 }
 
 async function loadPhotos() {
-  const res = await fetch('data/photos.geojson');
-  const data = await res.json();
+  let data;
+  try {
+    const res = await fetch('data/photos.geojson');
+    if (!res.ok) throw new Error(`HTTP ${res.status} sur data/photos.geojson`);
+    data = await res.json();
+  } catch (err) {
+    console.error('Impossible de charger data/photos.geojson :', err);
+    return;
+  }
 
   data.features.forEach((feature) => {
     const [lng, lat] = feature.geometry.coordinates;
@@ -114,6 +121,10 @@ async function loadPhotos() {
     const el = document.createElement('div');
     el.className = 'marker';
     el.style.backgroundImage = `url(${props.image})`;
+    // sécurité en plus du CSS : le repère photo doit toujours passer
+    // au-dessus du point GPS / cercle de précision, et rester cliquable
+    el.style.zIndex = '50';
+    el.style.pointerEvents = 'auto';
 
     el.addEventListener('click', () => {
       const popup = new maplibregl.Popup({
@@ -128,6 +139,14 @@ async function loadPhotos() {
       const btn = popup.getElement().querySelector('.popup-photo-btn');
       if (btn) {
         btn.addEventListener('click', () => openFullscreen(btn.dataset.src));
+        const img = btn.querySelector('img');
+        if (img) {
+          img.addEventListener('error', () => {
+            console.error('Image introuvable :', img.src);
+            btn.textContent = 'Image introuvable — vérifier le chemin/casse du fichier';
+            btn.style.cssText = 'display:flex;align-items:center;justify-content:center;padding:12px;text-align:center;font-size:11px;color:var(--paper-dim);';
+          }, { once: true });
+        }
       }
     });
 
