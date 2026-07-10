@@ -4,7 +4,7 @@
   "features": [
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [4.439712, 44.045885] },
+      "geometry": { "type": "Point", "coordinates": [4.4397, 44.0458] },
       "properties": {
         "id": 1,
         "year": 2014,
@@ -13,5 +13,6 @@
         "image": "images/001.jpg"
       }
     },
+
   ]
 }
