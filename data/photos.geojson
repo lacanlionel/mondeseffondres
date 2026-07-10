@@ -4,58 +4,14 @@
   "features": [
     {
       "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [4.4413, 44.0454] },
+      "geometry": { "type": "Point", "coordinates": [4.439712, 44.045885] },
       "properties": {
         "id": 1,
         "year": 2014,
-        "title": "Le talus, hiver",
-        "note": "Première prise après la crue. Le sentier n'existait pas encore sous cette forme.",
+        "title": "La place de la république",
+        "note": "La place vidée de ses voitures à l'occasion du festival Terralha 2026",
         "image": "images/001.jpg"
       }
     },
-    {
-      "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [4.4432, 44.0468] },
-      "properties": {
-        "id": 2,
-        "year": 2017,
-        "title": "Ligne de peupliers",
-        "note": "Alignement planté dans les années 60, coupe partielle observée trois ans plus tard.",
-        "image": "images/002.jpg"
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [4.4395, 44.0440] },
-      "properties": {
-        "id": 3,
-        "year": 2019,
-        "title": "Ancien passage à gué",
-        "note": "Vestige d'un usage disparu, repéré en suivant le relevé GPS d'une marche précédente.",
-        "image": "images/003.jpg"
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [4.4398, 44.0475] },
-      "properties": {
-        "id": 4,
-        "year": 2021,
-        "title": "Friche est",
-        "note": "Recolonisation végétale rapide, comparée à la même vue prise sept ans plus tôt.",
-        "image": "images/004.jpg"
-      }
-    },
-    {
-      "type": "Feature",
-      "geometry": { "type": "Point", "coordinates": [4.4440, 44.0435] },
-      "properties": {
-        "id": 5,
-        "year": 2023,
-        "title": "Point haut",
-        "note": "Vue d'ensemble du secteur, repère utilisé pour recaler les prises suivantes.",
-        "image": "images/005.jpg"
-      }
-    }
   ]
 }
