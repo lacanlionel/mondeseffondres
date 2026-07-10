@@ -1,29 +1,30 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Relevé</title>
-<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4/dist/maplibre-gl.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Relevé — archive photographique du paysage</title>
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4/dist/maplibre-gl.css" />
+<script src="https://unpkg.com/maplibre-gl@4/dist/maplibre-gl.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<div id="map"></div>
+
+<div id="map" class="attrib-fix"></div>
 
 <div class="topbar">
-<div class="title">Relevé</div>
-<div class="meta">Saint‑Quentin‑la‑Poterie<br>archive photographique</div>
+  <div class="title">Relevé</div>
+  <div class="meta">Saint-Quentin-la-Poterie · Gard<br>archive photographique du paysage</div>
 </div>
 
-<div id="panel" class="panel">
-<div class="panel-body" id="panelBody"></div>
+<div class="panel" id="panel">
+  <button class="close" id="closeBtn">Fermer ✕</button>
+  <div class="panel-handle"><span></span></div>
+  <div class="panel-body" id="panelBody"></div>
 </div>
 
-<button id="locateBtn" class="locate-btn">◎</button>
-
-<script src="https://unpkg.com/maplibre-gl@4/dist/maplibre-gl.js"></script>
 <script src="js/app.js"></script>
 </body>
 </html>
